@@ -1,0 +1,12 @@
+langchain
+langchain-text-splitters
+sentence-transformers
+faiss-cpu
+numpy
+python-telegram-bot>=20.0
+transformers>=4.38.0
+accelerate>=0.27.0
+pydantic>=2.0
+python-dotenv>=1.0.0
+llama-cpp-python
+ollama

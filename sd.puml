@@ -1,0 +1,63 @@
+@startuml
+' Заголовок и настройка
+title Процесс обновления векторного индекса
+autonumber
+skinparam linetype ortho
+
+' Участники (с алиасами и типами)
+actor "Источник данных\n(локальная папка)" as source
+participant "Скрипт update_index.py" as script
+database "Векторный индекс\n(FAISS, .faiss)" as index
+database "Metadata\n(JSONL, metadata.jsonl)" as metadata
+database "Чанки\n(JSONL, chunks.jsonl)" as chunks
+queue "Логи\n(update_log.txt)" as logs
+
+
+' Последовательность взаимодействий
+source -> script : Новые/изменённые\nфайлы (.txt, .md и др.)
+activate script
+
+script -> script : 1. Разбиение на чанки\n(256 токенов, overlap: 64)
+script -> script : 2. Генерация эмбеддингов\n(модель: all-MiniLM-L6-v2)
+
+
+script -> index : 3. Добавление в индекс\n(FAISS add() + write_index())
+activate index
+index --> script : Подтверждение\n(размер индекса: ntotal)
+deactivate index
+
+
+script -> metadata : 4. Запись метаданных\n{"file": "...", "chunk_id": N, "timestamp": "..."}
+activate metadata
+metadata --> script : Подтверждение записи
+deactivate metadata
+
+
+script -> chunks : 5. Сохранение чанков\n{"text": "..."}
+activate chunks
+chunks --> script : Подтверждение сохранения
+deactivate chunks
+
+
+script -> logs : 6. Логирование\n(время, кол-во чанков, ошибки)
+activate logs
+logs --> script : Подтверждение записи лога
+deactivate logs
+
+
+
+' Обратная связь (контроль)
+script -> index : Запрос текущего размера индекса
+activate index
+index --> script : ntotal (количество векторов)
+deactivate index
+
+
+script -> logs : Анализ ошибок\n(для повторных попыток)
+activate logs
+logs --> script : Список ошибок/предупреждений
+deactivate logs
+
+
+deactivate script
+@enduml

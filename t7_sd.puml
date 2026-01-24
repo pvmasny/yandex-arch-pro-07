@@ -1,0 +1,11 @@
+@startuml
+actor Пользователь
+participant "RAG-бот" as bot
+participant "FAISS-индекс" as index
+participant "CrossEncoder" as CrossEncoder
+
+User -> bot: Запрос
+bot -> index: Поиск по эмбеддингам
+bot -> CrossEncoder: реранкинг (cross-encoder/mmarco-mMiniLMv2-L12-H384-v1)
+index --> bot: Топ-k
+@enduml
