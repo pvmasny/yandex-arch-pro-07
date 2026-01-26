@@ -1,0 +1,18 @@
+{
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "embedding_dim": 384,
+  "num_files": 30,
+  "num_chunks": 65,
+  "num_unique_chunks": 65,
+  "elapsed_chunking_s": 0.009,
+  "elapsed_model_load_s": 2.793,
+  "elapsed_embedding_s": 1.603,
+  "elapsed_faiss_io_s": 0.001,
+  "elapsed_write_meta_s": 0.03,
+  "elapsed_total_s": 4.437,
+  "data_dir": "Task2\\knowledge_base\\modified_md",
+  "out_dir": "index",
+  "faiss_index": "index\\faiss.index",
+  "metadata": "index\\metadata.jsonl",
+  "chunks_gz": "index\\chunks.jsonl.gz"
+}
